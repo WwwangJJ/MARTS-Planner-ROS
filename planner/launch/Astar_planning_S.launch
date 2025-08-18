@@ -26,7 +26,7 @@
 <arg name="isNarrowSlitMode"    default=" false"     />
 <arg name="time_ahead"          default=" 0.300"    />
 <!-- map in file -->
-<arg name="pcd_path"            default="$(find grid_path_searcher)/pcd/map_init_3.pcd"/>
+<arg name="pcd_path"            default="$(find grid_path_searcher)/pcd/map_init_4.pcd"/>
 
 <!-- random map -->
 <arg name="random_num"          default=" 50"/>
