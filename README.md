@@ -21,5 +21,5 @@ This mode is used for re-planning, just as described in the paper, the planning 
 After conduct the command, you will see the window for rviz. Please follow the gif below for trajectory planning in a random map.
     
 <p align = "center">
-    <img src="Figs/replan.gif" width = "500" height = "347" border="5" />
+    <img src="Figs/replan.gif"/>
 </p>
