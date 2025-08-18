@@ -25,7 +25,7 @@
 <arg name="isReplanMode"        default=" true"     />
 <arg name="time_ahead"          default=" 0.150"    />
 <!-- map in file -->
-<arg name="pcd_path"            default="$(find grid_path_searcher)/pcd/map_init_3.pcd"/>
+<arg name="pcd_path"            default="$(find grid_path_searcher)/pcd/map_init_4.pcd"/>
 
 <arg name="wall_lenth"          default=" 1.4"/>
 <arg name="wall_width"          default=" 1.4"/>
