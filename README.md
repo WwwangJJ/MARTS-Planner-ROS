@@ -37,7 +37,7 @@ After conduct the command, you will see the window for rviz. Please follow the g
 </p>
 
 Use 3D Nav Goal to select the starting point (first time) and the end point. 
-### Note: The target point must not be inside the obstacle. The black outer border on the map is the map range, and the target point cannot exceed the map range.
+#### Note: The target point must not be inside the obstacle. The black outer border on the map is the map range, and the target point cannot exceed the map range.
 
 ### Example 2: Real world S-shaped obstacle avoidance trajectory
 This example shows the planner for a real world S-shaped obstacle avoidance trajectory which is showed in the gif below.
