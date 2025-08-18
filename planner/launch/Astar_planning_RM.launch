@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="utf-8"?>
+<launch>
+
+   <arg name="odom_topic" value="odom" />
+   <node name="rviz" pkg="rviz" type="rviz" output="screen"
+    args="-d $(find gcopter)/config/Astar_planning.rviz"> 
+  </node>
+
+<!-- Suitable For All Motion Capture Map -->
+<arg name="map_size_x" default="80.0"/>   
+<arg name="map_size_y" default="40.0"/>
+<arg name="map_size_z" default="5.0"/>
+
+<arg name="search_x_max" default="30.0"/>   
+<arg name="search_x_min" default="-30.0"/>
+<arg name="search_y_max" default="15.0"/>
+<arg name="search_y_min" default="-15.0"/>   
+<arg name="search_z_max" default="1.2"/>
+<arg name="search_z_min" default="1.0"/>
+
+<arg name="cloud_resolution"    default=" 0.2"/>
+
+<arg name="map_id"              default=" 3"        />
+<arg name="isExp"               default=" false"    />
+<arg name="isReplanMode"        default=" true"     />
+<arg name="time_ahead"          default=" 0.150"    />
+<!-- map in file -->
+<arg name="pcd_path"            default="$(find grid_path_searcher)/pcd/map_init_3.pcd"/>
+
+<arg name="wall_lenth"          default=" 1.4"/>
+<arg name="wall_width"          default=" 1.4"/>
+<arg name="wall_hight"          default=" 1.8"/>
+
+<!-- random map -->
+<arg name="random_num"          default=" 120"/>
+
+<!-- Astar param -->
+<arg name="distance"            default="euclidean"/> <!--　euclidean  manhattan-->
+<arg name="weight_a"            default=" 1.0"/>      
+<arg name="weight_b"            default=" 1.0"/>
+<arg name="weight_angle"        default=" 1.0"/>
+
+<arg name="length"              default=" 1.0"/>
+
+<arg name="max_angle"           default=" 0.3333333"/>
+<arg name="min_angle"           default=" 0.0466667"/>
+<arg name="angle_resolution"    default=" 12"/>
+
+<!-- ID: 0 -->
+<arg name="wayPointSplitNum"    default=" 7"/>
+<arg name="targetAngle"         default="140.0"/>
+
+  <node pkg="grid_path_searcher" type="astar_path_searcher" name="astar_path_searcher" output="screen" required = "true">
+      <remap from="~waypoints"       to="/waypoint_generator/waypoints"/>
+      <remap from="~map"             to="/complex_map/global_map"/>
+
+      <param name="map/margin"                  value="0.4"                     />
+
+      <param name="map/resolution"              value="0.4"                     />
+
+      <param name="map/x_size"                  value="$(arg map_size_x)"       />
+      <param name="map/y_size"                  value="$(arg map_size_y)"       />
+      <param name="map/z_size"                  value="$(arg map_size_z)"       />
+
+      <param name="map/isExp"                   value="$(arg isExp)"            />
+      <param name="map/isReplanMode"            value="$(arg isReplanMode)"     />
+      <param name="map/time_ahead"              value="$(arg time_ahead)"       />
+
+      <param name="search/x_max"                value="$(arg search_x_max)"     />
+      <param name="search/x_min"                value="$(arg search_x_min)"     />
+      <param name="search/y_max"                value="$(arg search_y_max)"     />
+      <param name="search/y_min"                value="$(arg search_y_min)"     />
+      <param name="search/z_max"                value="$(arg search_z_max)"     />
+      <param name="search/z_min"                value="$(arg search_z_min)"     />
+	  
+      <param name="heuristic/distance"          value="$(arg distance)"         />
+      <param name="weight/a"                    value="$(arg weight_a)"         />
+      <param name="weight/b"                    value="$(arg weight_b)"         />
+      <param name="weight/angle"                value="$(arg weight_angle)"     />
+      <param name="weight/length"               value="$(arg length)"           />
+      <param name="weight/max_angle"            value="$(arg max_angle)"        />
+      <param name="weight/min_angle"            value="$(arg min_angle)"        />
+      <param name="weight/angle_resolution"     value="$(arg angle_resolution)" />
+      <param name="wayPts/wayPointSplitNum"     value="$(arg wayPointSplitNum)" />
+      <param name="wayPts/targetAngle"          value="$(arg targetAngle)" />
+  </node>
+
+  <node pkg ="grid_path_searcher" name ="complex_map" type ="complex_map" output = "screen">      
+      <param name="sensing/rate"            value="0.5"/>
+      <param name="cloud_resolution"        value="$(arg cloud_resolution)"/>
+
+      <param name="map_id"                  value="$(arg map_id)"/>
+      <!-- map in file -->
+      <param name="pcd_path"                value="$(arg pcd_path)"/>
+      <!-- random map -->
+      <param name="random_num"              value="$(arg random_num)"/>
+
+  </node>
+
+  <node pkg="grid_path_searcher" name="waypoint_generator" type="waypoint_generator" output="screen">
+      <remap from="~goal" to="/goal"/>
+      <param name="waypoint_type" value="manual-lonely-waypoint"/>    
+  </node>
+
+  <node pkg="gcopter" type="global_planning" name="global_planning_node" output="screen">
+    <rosparam file="$(find gcopter)/config/Astar_planning_RM.yaml" command="load" />
+
+    <remap from="~grid_map/cloud" to="/complex_map/global_map"/>
+    <param name="grid_map/resolution"             value="0.1" /> 
+    <param name="grid_map/map_size_x"             value="80.0" /> 
+    <param name="grid_map/map_size_y"             value="40.0" /> 
+    <param name="grid_map/map_size_z"             value="5.0" /> 
+    <param name="grid_map/local_update_range_x"   value="80.0" /> 
+    <param name="grid_map/local_update_range_y"   value="40.0" /> 
+    <param name="grid_map/local_update_range_z"   value="5.0" /> 
+    <param name="grid_map/obstacles_inflation"    value="0.1" /> 
+    <param name="grid_map/local_map_margin"       value="10"/>
+    <param name="grid_map/virtual_ceil_height"    value="3.0"/>            
+    <param name="grid_map/ground_height"          value="-0.01"/>
+
+    <!-- local fusion -->
+    <param name="grid_map/p_min"  value="0.12"/>
+    <param name="grid_map/p_max"  value="0.90"/>
+    <param name="grid_map/p_occ"  value="0.80"/>
+    <param name="grid_map/visualization_truncate_height"    value="2.8"/>
+    <param name="grid_map/pose_type"                        value="1"/>  
+    <param name="grid_map/frame_id"                         value="odom"/>
+
+    <!-- sdf map -->
+    <param name="grid_map/local_bound_inflate"   value="0.1"/>                  
+    <param name="grid_map/show_esdf_time"                  value="false"/>      
+    <param name="grid_map/esdf_slice_height"               value="0.3"/>         
+
+  </node>
+
+  <include file="$(find gcopter)/launch/odom_visual.launch">
+      <arg name="drone_id"      value="0"/>
+      <arg name="isQuadrotor"   value="false"/>
+      <arg name="odom_topic"    value="$(arg odom_topic)"/>
+
+      <arg name="traj_scale_x"  value="0.02"/>
+      <arg name="traj_scale_y"  value="0.0"/>
+      <arg name="traj_scale_z"  value="0.0"/>
+
+      <arg name="traj_color_r"  value="1.0"/>
+      <arg name="traj_color_g"  value="0.0"/>
+      <arg name="traj_color_b"  value="0.0"/>
+      <arg name="traj_color_a"  value="0.6"/>
+
+      <arg name="color_r"  value="255.0"/>
+      <arg name="color_g"  value="255.0"/>
+      <arg name="color_b"  value="255.0"/>
+      <arg name="color_a"  value="1.0"/>
+
+  </include>
+  
+  <include file="$(find gcopter)/launch/odom_visual.launch">
+      <arg name="drone_id"      value="1"/>
+      <arg name="isQuadrotor"   value="true"/>
+      <arg name="odom_topic"    value="$(arg odom_topic)"/>
+
+      <arg name="traj_scale_x"  value="0.02"/>
+      <arg name="traj_scale_y"  value="0.0"/>
+      <arg name="traj_scale_z"  value="0.0"/>
+
+      <arg name="traj_color_r"  value="1.0"/>
+      <arg name="traj_color_g"  value="0.0"/>
+      <arg name="traj_color_b"  value="0.0"/>
+      <arg name="traj_color_a"  value="0.6"/>
+
+      <arg name="color_r"  value="237.0"/>
+      <arg name="color_g"  value="90.0"/>
+      <arg name="color_b"  value="101.0"/>
+      <arg name="color_a"  value="1.0"/>
+      
+
+  </include>
+
+  <include file="$(find gcopter)/launch/odom_visual.launch">
+      <arg name="drone_id"      value="2"/>
+      <arg name="isQuadrotor"   value="true"/>
+      <arg name="odom_topic"    value="$(arg odom_topic)"/>
+
+      <arg name="traj_scale_x"  value="0.02"/>
+      <arg name="traj_scale_y"  value="0.0"/>
+      <arg name="traj_scale_z"  value="0.0"/>
+
+      <arg name="traj_color_r"  value="1.0"/>
+      <arg name="traj_color_g"  value="0.0"/>
+      <arg name="traj_color_b"  value="0.0"/>
+      <arg name="traj_color_a"  value="0.6"/>
+
+      <arg name="color_r"  value="237.0"/>
+      <arg name="color_g"  value="90.0"/>
+      <arg name="color_b"  value="101.0"/>
+      <arg name="color_a"  value="1.0"/>
+
+  </include>
+
+  <include file="$(find gcopter)/launch/odom_visual.launch">
+      <arg name="drone_id"      value="3"/>
+      <arg name="isQuadrotor"   value="true"/>
+      <arg name="odom_topic"    value="$(arg odom_topic)"/>
+
+      <arg name="traj_scale_x"  value="0.02"/>
+      <arg name="traj_scale_y"  value="0.0"/>
+      <arg name="traj_scale_z"  value="0.0"/>
+
+      <arg name="traj_color_r"  value="1.0"/>
+      <arg name="traj_color_g"  value="0.0"/>
+      <arg name="traj_color_b"  value="0.0"/>
+      <arg name="traj_color_a"  value="0.6"/>
+
+      <arg name="color_r"  value="237.0"/>
+      <arg name="color_g"  value="90.0"/>
+      <arg name="color_b"  value="101.0"/>
+      <arg name="color_a"  value="1.0"/>
+
+  </include>
+
+  <include file="$(find gcopter)/launch/odom_visual.launch">
+      <arg name="drone_id"      value="4"/>
+      <arg name="isQuadrotor"   value="true"/>
+      <arg name="odom_topic"    value="$(arg odom_topic)"/>
+
+      <arg name="traj_scale_x"  value="0.02"/>
+      <arg name="traj_scale_y"  value="0.0"/>
+      <arg name="traj_scale_z"  value="0.0"/>
+
+      <arg name="traj_color_r"  value="1.0"/>
+      <arg name="traj_color_g"  value="0.0"/>
+      <arg name="traj_color_b"  value="0.0"/>
+      <arg name="traj_color_a"  value="0.6"/>
+
+      <arg name="color_r"  value="237.0"/>
+      <arg name="color_g"  value="90.0"/>
+      <arg name="color_b"  value="101.0"/>
+      <arg name="color_a"  value="1.0"/>
+
+  </include>
+
+  <include file="$(find gcopter)/launch/odom_visual.launch">
+      <arg name="drone_id"      value="5"/>
+      <arg name="isQuadrotor"   value="true"/>
+      <arg name="odom_topic"    value="$(arg odom_topic)"/>
+
+      <arg name="traj_scale_x"  value="0.02"/>
+      <arg name="traj_scale_y"  value="0.0"/>
+      <arg name="traj_scale_z"  value="0.0"/>
+
+      <arg name="traj_color_r"  value="1.0"/>
+      <arg name="traj_color_g"  value="0.0"/>
+      <arg name="traj_color_b"  value="0.0"/>
+      <arg name="traj_color_a"  value="0.6"/>
+
+      <arg name="color_r"  value="237.0"/>
+      <arg name="color_g"  value="90.0"/>
+      <arg name="color_b"  value="101.0"/>
+      <arg name="color_a"  value="1.0"/>
+
+  </include>
+
+  <include file="$(find gcopter)/launch/odom_visual.launch">
+      <arg name="drone_id"      value="6"/>
+      <arg name="isQuadrotor"   value="true"/>
+      <arg name="odom_topic"    value="$(arg odom_topic)"/>
+
+      <arg name="traj_scale_x"  value="0.02"/>
+      <arg name="traj_scale_y"  value="0.0"/>
+      <arg name="traj_scale_z"  value="0.0"/>
+
+      <arg name="traj_color_r"  value="1.0"/>
+      <arg name="traj_color_g"  value="0.0"/>
+      <arg name="traj_color_b"  value="0.0"/>
+      <arg name="traj_color_a"  value="0.6"/>
+
+      <arg name="color_r"  value="237.0"/>
+      <arg name="color_g"  value="90.0"/>
+      <arg name="color_b"  value="101.0"/>
+      <arg name="color_a"  value="1.0"/>
+
+  </include>
+
+</launch>

@@ -1,0 +1,44 @@
+<launch>
+    <arg name="drone_id"/>
+    <arg name="odom_topic"/>
+    <arg name="isQuadrotor"/>
+
+    <arg name="traj_scale_x"/>
+    <arg name="traj_scale_y"/>
+    <arg name="traj_scale_z"/>
+
+    <arg name="traj_color_r"/>
+    <arg name="traj_color_g"/>
+    <arg name="traj_color_b"/>
+    <arg name="traj_color_a"/>
+
+    <arg name="color_r"/>
+    <arg name="color_g"/>
+    <arg name="color_b"/>
+    <arg name="color_a"/> 
+
+    <node pkg="odom_visualization" name="drone_$(arg drone_id)_odom_visualization" type="odom_visualization" output="screen">
+        <remap from="~odom" to="drone_$(arg drone_id)_odom"/>
+
+        <param name="color/r" value="$(arg color_r)"/>        
+        <param name="color/g" value="$(arg color_g)"/>        
+        <param name="color/b" value="$(arg color_b)"/>
+        <param name="color/a" value="$(arg color_a)"/>  
+
+        <param name="traj/scale/x" value="$(arg traj_scale_x)"/>
+        <param name="traj/scale/y" value="$(arg traj_scale_y)"/>
+        <param name="traj/scale/z" value="$(arg traj_scale_z)"/>
+
+        <param name="traj/color/r" value="$(arg traj_color_r)"/>
+        <param name="traj/color/g" value="$(arg traj_color_g)"/>
+        <param name="traj/color/b" value="$(arg traj_color_b)"/>
+        <param name="traj/color/a" value="$(arg traj_color_a)"/>
+
+        <param name="covariance_scale" value="100.0"/>       
+        <param name="robot_scale" value="0.75"/>
+        <param name="tf45" value="false"/>
+        <param name="drone_id" value="$(arg drone_id)"/>
+        <param name="isQuadrotor"   value="$(arg isQuadrotor)"/>
+    </node>
+
+</launch>

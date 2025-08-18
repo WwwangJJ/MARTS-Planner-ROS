@@ -1,0 +1,110 @@
+MapTopic:                   '/voxel_map'
+
+TargetTopic:                '/move_base_simple/goal'
+
+TargetwayPtsTopic:          '/astar_path_searcher/transport_vis'
+
+DilateRadius:               0.5
+
+VoxelWidth:                 0.2
+
+MapBound:                   [-200.0, 200.0, -200.0, 200.0, 0.0, 5.0]
+
+TimeoutRRT:                 0.02
+
+Percent:                    50.0
+
+MinHeightL:                 0.1
+
+MaxHeightQ:                 2.0
+
+MaxVelMagL:                 20.0
+
+MaxAccMagL:                 20.0
+
+MaxVelMagQ:                 20.0
+
+MaxBdrMag:                  2.7
+
+MaxTiltAngle:               1.05
+
+MinTheta:                  -0.0
+
+MaxTheta:                   0.3
+
+MinPsi:                     -0.33333333333333333333
+
+MaxPsi:                     0.33333333333333333333
+
+MinT:                       0.2
+
+MaxT:                       2.5
+
+MinThrust:                  2.0
+
+MaxThrust:                  20.0
+
+MinDistance:                1.2     
+
+Clearence:                  0.3
+
+CableLength:                1.0
+
+
+MassQ:                      0.317
+
+MassL:                      0.110
+
+GravAcc:                    9.794
+
+HorizDrag:                  0.70
+
+VertDrag:                   0.80
+
+ParasDrag:                  0.01
+
+SpeedEps:                   0.0001
+
+SmoothingEps:               1.0e-2
+
+IntegralIntervs:            4         # 
+
+CableSampleNums:            5        # 
+
+RelCostTol:                3.0e-5
+
+DroneNum:                   3
+
+IsWayPointsRemovable:       true
+
+InifinAngT:                 [0.27, 0.0, 1.0]
+
+InitLoadPos:                [-6.43, -2.28, 0.8]     #   window  
+
+EndLoadPos:                 [6.5, 2.75, 0.8]     #  window
+
+WeightT:                    2000.0
+
+WeightE:                    0.3               #   window
+
+ChiVec:                     [1.0, 1.0, 5000.0, 1000.0, 1.0, 1.0, 1000000.0]   # pos, vel, collision, omg, tiltAngle, thrust, uniformforce   window
+
+kf:                         8.98132e-9
+
+initHeight:                 0.3
+
+initYaw:                    0.0
+
+takeOffVel:                 0.1
+
+transientTime:              2.0
+
+DisBetweenWaypoints:        1.5      
+
+ContinuityDescend:          [0, 0, 0]
+
+BoundaryConditionSlack:     [0, 0, 0]
+
+ShowAll:                    false
+
+time_ahead:                 0.150
