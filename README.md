@@ -1,5 +1,9 @@
 # MARTS-Planner
-Code for paper "Safe and Agile Transportation of Cable-Suspended Payload via Multiple Aerial Robots"
+ROS 1 Version Code for paper "Safe and Agile Transportation of Cable-Suspended Payload via Multiple Aerial Robots".
+
+You can find the **ROS 2 version** of the code here: https://anonymous.4open.science/r/Transport-ROS2
+
+The **pure C++ version** and a **Python `ctypes` example** (calling the shared library) are available here: https://anonymous.4open.science/r/Transport_Lib
 
 ## Applications
 
