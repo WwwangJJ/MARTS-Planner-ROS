@@ -8,7 +8,7 @@ The **pure C++ version** and a **Python `ctypes` example** (calling the shared l
 ## Applications
 
 ### Example 1: Replan Mode
-This mode is used for re-planning, just as described in the paper, the planning time required for each re-planning is within 100ms, and the planning success rate can reach 100%, under the premise of reasonable parameter selection. For installation, the following terminal commands are helpful.
+This mode is used for re-planning, just as described in the paper, the planning time required for each re-planning is real-time level, under the premise of reasonable parameter selection. For installation, the following terminal commands are helpful.
 
 ### 1. Requirements
 The code is tested on clean Ubuntu 20.04 with ROS noetic installation.
